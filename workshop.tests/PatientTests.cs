@@ -1,5 +1,5 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace workshop.tests;
 
@@ -14,9 +14,9 @@ public class Tests
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/patients");
+        var response = await client.GetAsync("surgery/patients");
 
         // Assert
-        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
     }
 }
