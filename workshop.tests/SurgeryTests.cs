@@ -3,22 +3,28 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using workshop.wwwapi.DTO;
-using workshop.wwwapi.Models;
 
 namespace workshop.tests;
 
 public class Tests
 {
+    private HttpClient _client;
+    
+    [SetUp]
+    public void Setup()
+    {
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        
+        _client = factory.CreateClient();
+    }
 
     [Test]
     public async Task PatientEndpointStatus()
     {
         // Arrange
-        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
-        var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("surgery/patients");
+        var response = await _client.GetAsync("surgery/patients");
 
         // Assert
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -28,15 +34,13 @@ public class Tests
     public async Task PostPatientEndpoint()
     {
         // Arrange
-        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
-        var client = factory.CreateClient();
         var patient = new PatientPost();
         patient.FullName = "Jonas Doe";
 
         PatientResponse newPatient = null;
 
         // Act
-        var response = await client.PostAsync("surgery/patients", new StringContent(JsonSerializer.Serialize(patient), Encoding.UTF8, "application/json"));
+        var response = await _client.PostAsync("surgery/patients", new StringContent(JsonSerializer.Serialize(patient), Encoding.UTF8, "application/json"));
         
         // Assert
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
@@ -46,11 +50,9 @@ public class Tests
     public async Task GetDoctorsEndpoint()
     {
         // Arrange
-        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
-        var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("surgery/doctors");
+        var response = await _client.GetAsync("surgery/doctors");
 
         // Assert
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
