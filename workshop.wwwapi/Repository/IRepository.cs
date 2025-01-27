@@ -6,6 +6,8 @@ public interface IRepository<T> where T : class
 {
     Task<IEnumerable<T>> GetAll(params Expression<Func<T, object>>[] includes);
     Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+    Task<IEnumerable<T>> GetAllWithIncludes(
+        Func<IQueryable<T>, IQueryable<T>> include);
     Task<T?> Get(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
     Task<T?> GetWithIncludes(
         Expression<Func<T, bool>> predicate,

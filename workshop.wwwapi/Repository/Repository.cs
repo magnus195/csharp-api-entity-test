@@ -51,6 +51,18 @@ public class Repository<T>(DatabaseContext db) : IRepository<T> where T : class
  
         return await query.FirstOrDefaultAsync(predicate);
     }
+    
+    public async Task<IEnumerable<T>> GetAllWithIncludes(Func<IQueryable<T>, IQueryable<T>> include)
+    {
+        IQueryable<T> query = db.Set<T>();
+ 
+        if (include != null)
+        {
+            query = include(query);
+        }
+ 
+        return await query.ToListAsync();
+    }
 
     public async Task<T> Create(T entity)
     {

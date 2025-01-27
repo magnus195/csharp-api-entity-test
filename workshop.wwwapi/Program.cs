@@ -15,6 +15,8 @@ builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IRepository<Patient>, Repository<Patient>>();
 builder.Services.AddScoped<IRepository<Doctor>, Repository<Doctor>>();
 builder.Services.AddScoped<IRepository<Appointment>, Repository<Appointment>>();
+builder.Services.AddScoped<IRepository<Prescription>, Repository<Prescription>>();
+builder.Services.AddScoped<IRepository<Medicine>, Repository<Medicine>>();
 
 var app = builder.Build();
 
@@ -27,6 +29,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.ConfigurePatientEndpoint();
+app.ConfigurePrescriptionEndpoint();
 app.Run();
 
 public partial class Program
